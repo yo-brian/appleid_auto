@@ -35,9 +35,9 @@
         <nav>
             <ul>
                 <li><a href="#intro">简介</a></li>
-                <li><a href="#login">登录</a></li>
+                <li><a href="/auth/login">登录</a></li>
                 {if env('enable_register')}
-                <li><a href="#register">注册</a></li>
+                <li><a href="/auth/register">注册</a></li>
                 {/if}
             </ul>
         </nav>
@@ -46,38 +46,6 @@
         <article id="intro">
             <h2 class="major">简介</h2>
             <p>基于密保问题，自动解锁Apple ID，自动关闭双重认证，提供前端账号展示，支持多账号</p>
-        </article>
-        <article id="login">
-            <h2 class="major">登录</h2>
-            <form action="/user/login" method="post">
-                <div class="field half first">
-                    <label for="username">用户名</label>
-                    <input type="text" name="username" id="username" placeholder="请输入用户名"/>
-                </div>
-                <div class="field half">
-                    <label for="password">密码</label>
-                    <input type="password" name="password" id="password" placeholder="请输入密码"/>
-                </div>
-                <ul class="actions">
-                    <li><input type="submit" value="登录" class="primary special" name="login"/></li>
-                </ul>
-            </form>
-        </article>
-        <article id="register">
-            <h2 class="major">注册</h2>
-            <form action="/user/register" method="post">
-                <div class="field half first">
-                    <label for="username">用户名</label>
-                    <input type="text" name="username" id="username" placeholder="请输入用户名"/>
-                </div>
-                <div class="field half">
-                    <label for="password">密码</label>
-                    <input type="password" name="password" id="password" placeholder="请输入密码"/>
-                </div>
-                <ul class="actions">
-                    <li><input type="submit" value="注册" class="primary special" name="register"/></li>
-                </ul>
-            </form>
         </article>
     </div>
     {include file="index/footer"}

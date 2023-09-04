@@ -11,6 +11,7 @@ use app\model\User;
 use Exception;
 use think\facade\Session;
 use think\response\Json;
+use think\response\Redirect;
 use think\response\View;
 
 class UserController extends BaseController
@@ -28,12 +29,12 @@ class UserController extends BaseController
 
     }
 
-    public function info()
+    public function info(): View
     {
         $user = new User();
         $user = $user->fetch(Session::get('user_id'));
         if (!$user) {
-            return alert("error", "用户不存在", "2000", "/index");
+            return view('/error', ['msg' => '用户不存在']);
         }
         return view('/user/info', ['user' => $user]);
     }
@@ -65,30 +66,10 @@ class UserController extends BaseController
         }
     }
 
-    public function login(): string
-    {
-        $username = $this->request->param('username');
-        $password = $this->request->param('password');
-        $result = $this->app->authService->userLogin($username, $password);
-        if ($result['status']) {
-            return alert("success", $result['msg'], "2000", "/user/index");
-        } else {
-            return alert("error", $result['msg'], "2000", "/index");
-        }
-    }
-
-    public function register(): string
-    {
-        $username = $this->request->param('username');
-        $password = $this->request->param('password');
-        $result = $this->app->authService->userRegister($username, $password);
-        return alert($result['status'] ? "success" : "error", $result['msg'], "2000", "/index");
-    }
-
-    public function logout(): string
+    public function logout(): Redirect
     {
         Session::delete('user_id');
-        return alert("success", "登出成功", "2000", "/index");
+        return redirect('/');
     }
 
     public function account(): View
@@ -97,15 +78,15 @@ class UserController extends BaseController
         return view('/user/account', ['accounts' => $accountList]);
     }
 
-    public function accountEdit($id)
+    public function accountEdit($id): View
     {
         $account = new Account();
         $account = $account->fetch($id);
         if (!$account) {
-            return alert("error", "账号不存在", "2000", "/user/account");
+            return view('/error', ['msg' => '账号不存在']);
         }
         if ($account->owner != Session::get('user_id')) {
-            return alert("error", "无权操作", "2000", "/user/account");
+            return view('/error', ['msg' => '无权操作']);
         }
         return view('/user/accountDetail', ['account' => $account, 'action' => 'edit']);
     }

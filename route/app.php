@@ -21,11 +21,13 @@ Route::rule('/', 'index/index');
 Route::get('index', 'index/index');
 
 // 注册用户登录部分服务
-Route::group('user', function () {
-    Route::post('login', 'user/login');
-    Route::post('register', 'user/register');
+Route::group('auth', function () {
+    Route::rule('/', 'index/index');
+    Route::get('login', view('auth/login'));
+    Route::post('login', 'auth/login');
+    Route::get('register', 'auth/registerPage');
+    Route::post('register', 'auth/register');
 })->middleware(Auth::class);
-
 
 // 注册用户中心
 Route::rule('user/', 'user/index')->middleware(UserIndex::class);

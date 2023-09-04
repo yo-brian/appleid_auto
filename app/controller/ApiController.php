@@ -201,7 +201,7 @@ class ApiController extends BaseController
                 'id' => $account->id,
                 'username' => $account->username,
                 'password' => $account->password,
-                'status' => $account->message == "正常" && ((time() - strtotime($account->last_check)) < (($account->check_interval + 2) * 60)),
+                'status' => $account->message == ($account->message == "正常" || $account->message == "Normal") && ((time() - strtotime($account->last_check)) < (($account->check_interval + 2) * 60)),
                 'last_check' => $account->last_check,
                 'remark' => $account->frontend_remark,
             ];

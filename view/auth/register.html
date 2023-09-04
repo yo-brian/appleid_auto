@@ -1,0 +1,135 @@
+<body class=" d-flex flex-column">
+<div class="page page-center">
+    <div class="container container-tight py-4">
+        <div class="card card-md">
+            <div class="card-body">
+                <h2 class="h2 text-center mb-4">用户注册</h2>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fa-solid fa-user"></i> 用户名</label>
+                    <input class="form-control" name="username" placeholder="请输入您的用户名"
+                           type="text">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label"><i class="fa-solid fa-lock"></i> 密码</label>
+                    <div class="input-group input-group-flat">
+                        <input class="form-control" name="password" placeholder="请输入您的密码"
+                               type="password">
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">
+                        重复密码
+                    </label>
+                    <div class="input-group input-group-flat">
+                        <input class="form-control" name="confirm-password" placeholder="请重复您的密码" required
+                               type="password">
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button class="btn btn-primary w-100 register-button" type="submit">注册</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-muted mt-3">
+            已经有账号了？<a href="/auth/login" tabindex="-1">登录</a>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    const passwordInput = document.querySelector('input[name="password"]');
+    const confirmPasswordInput = document.querySelector('input[name="confirm-password"]');
+
+    passwordInput.addEventListener('input', checkPasswordMatch);
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (password === confirmPassword && confirmPassword !== '') {
+            confirmPasswordInput.classList.remove('is-invalid');
+            confirmPasswordInput.classList.add('is-valid');
+        } else {
+            confirmPasswordInput.classList.remove('is-valid');
+            confirmPasswordInput.classList.add('is-invalid');
+        }
+    }
+
+</script>
+<script>
+    document.querySelector('.register-button').addEventListener('click', function (event) {
+        var username = document.querySelector('input[name="username"]').value;
+        var password = document.querySelector('input[name="password"]').value;
+        var confirmPassword = document.querySelector('input[name="confirm-password"]').value;
+        if (username.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+                title: '错误',
+                text: '请输入用户名'
+            });
+            return;
+        }
+        if (password.trim() === '') {
+            Swal.fire({
+                icon: 'error',
+                title: '错误',
+                text: '请输入密码'
+            });
+            return;
+        }
+        if (confirmPassword !== password) {
+            Swal.fire({
+                icon: 'error',
+                title: '错误',
+                text: '两次输入的密码不一致'
+            });
+            return;
+        }
+        var data = {
+            username: username,
+            password: password
+        };
+        fetch('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('请求失败');
+                }
+                return response.json();
+            })
+            .then(function (result) {
+                if (result.ret === 1) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '成功',
+                        text: result.msg,
+                        showConfirmButton: true,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false
+                    }).then(function () {
+                        window.location.href = '/auth/login';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '错误',
+                        text: result.msg
+                    });
+                }
+            })
+            .catch(function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '错误',
+                    text: '系统错误'
+                });
+            });
+    });
+</script>

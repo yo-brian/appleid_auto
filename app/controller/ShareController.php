@@ -22,7 +22,7 @@ class ShareController extends BaseController
             if (!$account) {
                 continue;
             } else {
-                $account->status = $account->message == "正常" && ((time() - strtotime($account->last_check)) < (($account->check_interval + 2) * 60));
+                $account->status = ($account->message == "正常" || $account->message == "Normal") && ((time() - strtotime($account->last_check)) < (($account->check_interval + 2) * 60));
                 $accounts[] = $account;
             }
         }

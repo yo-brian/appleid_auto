@@ -15,16 +15,16 @@ class AuthService extends Service
         $this->app->bind('authService', AuthService::class);
     }
 
-    public function userLogin($username, $password): array
+    public function userLogin($username, $password): bool
     {
         $user = Db::table('user')->where('username', $username)->find();
         if ($user) {
             if (password_verify($password, $user['password'])) {
                 Session::set('user_id', $user['id']);
-                return ['status' => true, 'msg' => '登录成功'];
+                return true;
             }
         }
-        return ['status' => false, 'msg' => '用户名或密码错误'];
+        return false;
     }
 
     public function userRegister($username, $password): array

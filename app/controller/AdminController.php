@@ -22,18 +22,18 @@ class adminController extends BaseController
         return view('/admin/index', ['account_count' => $account_count, 'share_count' => $share_count, 'user_count' => $user_count]);
     }
 
-    public function user()
+    public function user(): View
     {
         $userList = $this->app->userService->fetchAll();
         return view('/admin/user', ['users' => $userList]);
     }
 
-    public function userEdit($id)
+    public function userEdit($id): View
     {
         $user = new User();
         $user = $user->fetch($id);
         if (!$user) {
-            return alert("error", "用户不存在", "2000", "/admin/user");
+            view('/error', ['msg' => '用户不存在']);
         }
         return view('/admin/userDetail', ['user' => $user, 'action' => 'edit']);
     }
@@ -78,12 +78,12 @@ class adminController extends BaseController
         return view('/admin/account', ['accounts' => $accountList]);
     }
 
-    public function accountEdit($id)
+    public function accountEdit($id): View
     {
         $account = new Account();
         $account = $account->fetch($id);
         if (!$account) {
-            return alert("error", "账号不存在", "2000", "/admin/account");
+            return view('/error', ['msg' => '用户不存在']);
         }
         return view('/admin/accountDetail', ['account' => $account, 'action' => 'edit']);
     }
